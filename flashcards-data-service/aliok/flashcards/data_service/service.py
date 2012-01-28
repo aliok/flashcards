@@ -13,46 +13,53 @@
 #limitations under the License.
 
 import webapp2
-from google.appengine.ext import db
 import json
 import datetime
+from aliok.flashcards.data_service import dictSet
 from model import User
-from model import Entry
-
-setSize = 100
-
+import logging
 
 class DataServiceHandler(webapp2.RequestHandler):
-    def get(self):
+    def getUser(self):
         userKey = self.request.get("userKey")
-        user = None
         if userKey:
-            user = User.get(userKey)
+            return User.get(userKey)
         else:
-            user = None
+            return None
 
+    def getEntrySetForUser(self, user):
+        newEntrySetNumber = user.lastEntrySet + 1
+        if newEntrySetNumber >= dictSet.dictSetCount:
+            newEntrySetNumber = 0
+        import_string = "from aliok.flashcards.data_service.dictSet import dictSet_{}".format(newEntrySetNumber)
+        exec import_string
+        entries = None
+        exec 'entries = dictSet_{}'.format(newEntrySetNumber)
+        return entries, newEntrySetNumber
+
+    def get(self):
+        user = self.getUser()
         now = datetime.datetime.now()
 
         if not user:
             user = User(createdOn=now, lastAccessedOn=now, lastEntrySet=-1)
 
-        entrySetCount = Entry.all().count(limit = 100000000) / setSize
+        entries, newEntrySetNumber = self.getEntrySetForUser(user)
 
-        newEntrySet = user.lastEntrySet + 1
-        if newEntrySet >= entrySetCount:
-            newEntrySet = 0
-
-
-        min = newEntrySet * setSize
-        q = db.GqlQuery("SELECT * FROM Entry WHERE index >= :min AND index <= :max", min=min, max=min + setSize)
-        entries = q.fetch(setSize)
-
-        user.lastEntrySet = newEntrySet
+        user.lastEntrySet = newEntrySetNumber
         user.lastAccessedOn = now
 
-        user.put()
+        try:
+            user.put()
+            userKeyToWrite = str(user.key())
+        except Exception as e:
+            logging.error(str(e))
+            userKeyToWrite = None
 
-        self.response.out.write(json.dumps({'userKey' : str(user.key()), 'entries' : [entry.getAsDict() for entry in entries]}))
+        def dictionarize(e):
+            return {'a': e[0], 'w': e[1], 't': e[2]}   #to save bandwidth
+
+        self.response.out.write(json.dumps({'userKey': userKeyToWrite, 'entries': [dictionarize(entry) for entry in entries]}))
 
 
 application = webapp2.WSGIApplication([('/data', DataServiceHandler)], debug=True)

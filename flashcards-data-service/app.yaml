@@ -13,7 +13,7 @@
 #limitations under the License.
 
 application: the-flashcards-data-service
-version: 0-0-1-alpha01
+version: 0-0-1-alpha02
 runtime: python27
 api_version: 1
 threadsafe: true
