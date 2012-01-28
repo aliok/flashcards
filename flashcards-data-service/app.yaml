@@ -1,0 +1,17 @@
+application: flashcards-data-service
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: true
+
+handlers:
+- url: /favicon\.ico
+  static_files: favicon.ico
+  upload: favicon\.ico
+
+- url: /data.*
+  script: aliok.flashcards.data_service.service.application
+
+- url: /init.*
+  script: aliok.flashcards.data_service.initalizer.application
+  login: admin
