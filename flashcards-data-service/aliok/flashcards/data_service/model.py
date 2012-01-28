@@ -16,7 +16,7 @@ from google.appengine.ext import db
 
 class Entry(db.Model):
     index = db.IntegerProperty(required=True)
-    word = db.StringProperty(required=True)
+    word = db.StringProperty(required=True, indexed=False)
     translation = db.StringProperty(required=True, indexed=False)
     article = db.StringProperty(required=True, choices=['der', 'die', 'das'], indexed=False)
 

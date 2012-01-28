@@ -23,15 +23,31 @@ class InitializeHandler(webapp2.RequestHandler):
     def get(self):
         logging.basicConfig(level=logging.DEBUG)
 
+        if 'PROD' == self.request.get('mode'):
+            fileName = 'dict.pickled.zip'
+        else:
+            fileName = 'dict.pickled.small.zip'
+
+        if self.request.get('start') and self.request.get('end'):
+            start = int(self.request.get('start'))
+            end = int(self.request.get('end'))
+        else:
+            start = 0
+            end = -1
+            db.delete(Entry.all())
+
         logging.debug('starting to read file')
-        with zipfile.ZipFile('dict.pickled.small.zip') as dict:
+        with zipfile.ZipFile(fileName) as dict:
             lines = pickle.loads(dict.read(name='dict.pkl'))
             allEntries = [Entry(index=line[0], article=line[1], word=line[2], translation=line[3]) for line in lines]
 
-            logging.debug('Found {} entries'.format(len(allEntries)))
+            if end==-1:
+                end = len(allEntries)
+
+            logging.debug('Found {} entries. Adding entries from {} to {}'.format(len(allEntries), start, end))
 
             step = 1000
-            for i in range(0, len(allEntries), step):
+            for i in range(start, end, step):
                 start = i
                 end = i + step
                 if end >= len(allEntries):

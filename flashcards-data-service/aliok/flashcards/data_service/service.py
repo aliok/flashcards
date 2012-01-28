@@ -19,7 +19,7 @@ import datetime
 from model import User
 from model import Entry
 
-setSize = 10
+setSize = 100
 
 
 class DataServiceHandler(webapp2.RequestHandler):

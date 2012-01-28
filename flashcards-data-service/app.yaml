@@ -12,8 +12,8 @@
 #See the License for the specific language governing permissions and
 #limitations under the License.
 
-application: flashcards-data-service
-version: 1
+application: the-flashcards-data-service
+version: 0-0-1-alpha01
 runtime: python27
 api_version: 1
 threadsafe: true
