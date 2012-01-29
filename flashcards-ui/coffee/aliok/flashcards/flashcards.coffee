@@ -5,8 +5,10 @@ class Context
   dataServiceUrl: () ->
     key = localStorage['userKey']
     time = new Date().getTime()
-    val = "http://the-flashcards-data-service.appspot.com/data?userKey=#{ key }&time=#{ time }&callback=?"
-    return val
+    if key
+      val = "http://the-flashcards-data-service.appspot.com/data?userKey=#{ key }&time=#{ time }&callback=?"
+    else
+      val = "http://the-flashcards-data-service.appspot.com/data?time=#{ time }&callback=?"
 
 class View
   registerPageCreateHandler      :(callback)->$('#mainPage' ).live 'pageinit', callback
