@@ -1,7 +1,4 @@
 class Context
-  #TODO: :-> or :()->
-  websqlStorageSupport :-> Modernizr.websqldatabase
-
   #adding time in milliseconds for breaking the browser cache.
   #we can of course do it with modifying JQuery.getJson function's options,
   #but in that case we will lose the nice syntax of it and use JQuery.ajax instead
@@ -9,7 +6,6 @@ class Context
     key = localStorage['userKey']
     time = new Date().getTime()
     val = "http://the-flashcards-data-service.appspot.com/data?userKey=#{ key }&time=#{ time }&callback=?"
-    console.log val
     return val
 
 class View
@@ -136,7 +132,7 @@ class Service
         for obj in data
           do (obj) =>
             if i==0
-              @databaseManager.addNewWordEntry obj['a'], obj['t'], obj['w'], callback(obj['a'], obj['t'], obj['w'])
+              @databaseManager.addNewWordEntry obj['a'], obj['t'], obj['w'], () -> callback(obj['a'], obj['t'], obj['w'])
             else
               @databaseManager.addNewWordEntry obj['a'], obj['t'], obj['w']
             i++
@@ -200,7 +196,7 @@ class DatabaseManager
     @database.transaction(
       (tx) -> tx.executeSql "INSERT INTO entry values(?, ?, ?, 'false')", [article, translation, word] ,
       (sqlError) -> window.alert(sqlError),
-      () -> callback() if callback
+      () => callback() if callback
     )
 
   deleteAllWords : (callback) =>
