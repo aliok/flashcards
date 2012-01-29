@@ -1,0 +1,90 @@
+<!--
+  ~ Copyright [2012] [Ali Ok - aliok@apache.org]
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" manifest="cache.manifest">
+
+<head>
+    <title>German Flashcards</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="../thirdparty/modernizr.js"></script>
+
+    <!--jquery and jquery mobile compressed-->
+    <!--<link rel="stylesheet"  href="../thirdparty/jquery.mobile/jquery.mobile-1.0.1.min.css" />-->
+    <!--<script src="../thirdparty/jquery/jquery-1.6.4.min.js"></script>-->
+    <!--<script src="../thirdparty/jquery.mobile/jquery.mobile-1.0.1.min.js"></script>-->
+
+    <!--jquery and jquery mobile not compressed-->
+    <link rel="stylesheet" href="../thirdparty/jquery.mobile/jquery.mobile-1.0.1.css"/>
+    <script src="../thirdparty/jquery/jquery-1.6.4.js"></script>
+    <script src="../thirdparty/jquery.mobile/jquery.mobile-1.0.1.js"></script>
+
+    <script src="../js/aliok/flashcards/flashcards.js"></script>
+
+    <style>
+        .correct {
+            color: #006400;
+        }
+
+        .wrong {
+            color: red;
+        }
+    </style>
+
+</head>
+
+<body>
+<div id="mainPage" data-role="page">
+
+    <div data-role="header">
+        <h1>German Flashcards</h1>
+    </div>
+
+    <div data-role="content" style="text-align: center;">
+
+        <h4>Score : <span id="score"></span></h4>
+
+        <h2>
+            <span id="article"></span>
+            <span id="word"></span>
+        </h2>
+        <h4>
+            <span id="translation"></span>
+        </h4>
+
+        <div id="answers" class="ui-grid-b">
+            <div class="ui-block-a">
+                <button id="answerDer">der</button>
+            </div>
+            <div class="ui-block-b">
+                <button id="answerDie">die</button>
+            </div>
+            <div class="ui-block-c">
+                <button id="answerDas">das</button>
+            </div>
+        </div>
+        <div id="nextWordContainer">
+            <button id="nextWord">Next</button>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
