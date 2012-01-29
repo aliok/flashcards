@@ -59,7 +59,14 @@ class DataServiceHandler(webapp2.RequestHandler):
         def dictionarize(e):
             return {'a': e[0], 'w': e[1], 't': e[2]}   #to save bandwidth
 
-        self.response.out.write(json.dumps({'userKey': userKeyToWrite, 'entries': [dictionarize(entry) for entry in entries]}))
+        jsonifiedData = json.dumps({'userKey': userKeyToWrite, 'entries': [dictionarize(entry) for entry in entries]})
 
+        callbackParam = self.request.get('callback')
+        if callbackParam:        #if exists, then return as JSONP
+            self.response.headers['Content-Type'] = 'application/javascript'
+            self.response.out.write('{}({});'.format(callbackParam, jsonifiedData))
+        else:
+            self.response.headers['Content-Type'] = 'application/json'
+            self.response.out.write(jsonifiedData)
 
 application = webapp2.WSGIApplication([('/data', DataServiceHandler)], debug=True)
