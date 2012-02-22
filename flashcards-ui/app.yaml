@@ -13,7 +13,7 @@
 #limitations under the License.
 
 application: the-flashcards
-version: 0-0-1-beta01
+version: 0-0-2
 runtime: python27
 api_version: 1
 threadsafe: true
@@ -29,3 +29,7 @@ handlers:
 - url: /
   static_files: index.html
   upload: index.html
+
+- url: /confirmFetchNextSet.html
+  static_files: confirmFetchNextSet.html
+  upload: confirmFetchNextSet.html

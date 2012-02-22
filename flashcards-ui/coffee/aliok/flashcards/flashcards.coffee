@@ -1,3 +1,28 @@
+#Copyright [2011] [Ali Ok - aliok AT apache org]
+#
+#Licensed under the Apache License, Version 2.0 (the "License");
+#you may not use this file except in compliance with the License.
+#You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+#Unless required by applicable law or agreed to in writing, software
+#distributed under the License is distributed on an "AS IS" BASIS,
+#WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#See the License for the specific language governing permissions and
+#limitations under the License.
+
+
+###
+ask user what to do when all words are shown
+add info link (src, etc)
+offline support
+show current set number on the ui
+allow fetching a set by number
+next word button, previous word button
+score mode / training mode
+###
+
 class Context
   #adding time in milliseconds for breaking the browser cache.
   #we can of course do it with modifying JQuery.getJson function's options,
@@ -43,6 +68,30 @@ class View
     else
       $('#article').attr 'class', 'wrong'
 
+  askToFetchNextSet : (callback) =>
+    $.mobile.changePage( "confirmFetchNextSet.html", {
+      transition: "pop",
+      reverse: false,
+      changeHash: false
+    });
+
+    goBackToIndex = () =>
+      $.mobile.changePage( "index.html", {
+        transition: "pop",
+        reverse: true,
+        changeHash: false
+      });
+
+    $('#nextSetFetchConfirmationYesButton').live 'click', ()=>
+      $('#nextSetFetchConfirmationYesButton').die 'click'
+      goBackToIndex()
+      callback(true)
+
+    $('#nextSetFetchConfirmationNoButton').live 'click', ()=>
+      $('#nextSetFetchConfirmationNoButton').die 'click'
+      goBackToIndex()
+      callback(false)
+
   alert : (text)-> window.alert text
 
 class Controller
@@ -75,28 +124,45 @@ class Controller
 
   nextWord:()=>
     @view.showLoadingDialog()
-    callback = (article, translation, word) =>
-      if word?
-        @currentArticle = article
-        @currentTranslation = translation
 
-        @view.showChoices()
+    showNextWord = ()=>
+      @service.getNextWord (article, translation, word)=>
+        if word?
+          @currentArticle = article
+          @currentTranslation = translation
 
-        @view.setWord word
-        @view.setTranslation @currentTranslation
-        @view.setArticle @currentArticle
+          @view.showChoices()
 
-        @view.hideLoadingDialog()
-      else
-        @view.hideLoadingDialog()
-        if Modernizr.websqldatabase
-          view.alert "You answered all the words, so internet connection is required to get new words." +
-            "Unable to connect server, please check your internet connection."
+          @view.setWord word
+          @view.setTranslation @currentTranslation
+          @view.setArticle @currentArticle
+
+          @view.hideLoadingDialog()
         else
-          view.alert "Unable to connect server, please check your internet connection."
+          @view.hideLoadingDialog()
+          #TODO: view.alert "Unable to connect server, please check your internet connection."
+          @view.alertConnectionProblem()
 
-    @service.getNextWord callback
+    setWordsAsNonShownAndShowNextWord = ()=>
+      @service.setWordsAsNonShown ()=>
+        showNextWord()
 
+    @service.checkAllShown (allShown) =>
+      if allShown
+        @view.askToFetchNextSet (fetchNextSet) =>
+          if fetchNextSet
+            @service.fetchNextSet (success)=>
+              if success
+                showNextWord()
+              else
+                @view.alertConnectionProblem()
+                ##TODO
+                @view.alertShowingCurrentSet()
+                setWordsAsNonShownAndShowNextWord()
+          else
+            setWordsAsNonShownAndShowNextWord()
+      else
+        showNextWord()
 
   start:()=>
     @view.registerPageCreateHandler @init
@@ -113,37 +179,33 @@ class Service
     @databaseManager.initializeDatabase callback
 
   getNextWord :(callback) =>
-    @databaseManager.checkIfWordStorageRefreshNecessary (refreshNecessary)=>
-      if refreshNecessary
-        @ajaxManager.getWords (data)=>
-          unless data
-            callback null
-          else
-            @constructWordStorage data, (article, translation, word)=>
-              @databaseManager.setWordAsShown word, ()=> callback article, translation, word
+    @databaseManager.getNextWord (article, translation, word)=>
+      @databaseManager.setWordAsShown word, ()=> callback article, translation, word
+
+  checkAllShown: (callback) =>
+    @databaseManager.checkAllShown callback
+
+  setWordsAsNonShown: (callback) =>
+    @databaseManager.setWordsAsNonShown callback
+
+  fetchNextSet: (callback) =>
+    @ajaxManager.fetchNextSet (data)=>
+      unless data
+        callback false
       else
-        @databaseManager.getNextWord (article, translation, word)=>
-          @databaseManager.setWordAsShown word, ()=> callback article, translation, word
+        @constructWordStorage data, ()-> callback(true)
 
   constructWordStorage : (data, callback) =>
     @databaseManager.deleteAllWords (sqlError)=>
       if sqlError
         window.alert 'Unable to delete all words for reconstructing the word storage'
       else
-        i = 0
-        for obj in data
-          do (obj) =>
-            if i==0
-              @databaseManager.addNewWordEntry obj['a'], obj['t'], obj['w'], () -> callback(obj['a'], obj['t'], obj['w'])
-            else
-              @databaseManager.addNewWordEntry obj['a'], obj['t'], obj['w']
-            i++
-
+        @databaseManager.addNewWordEntries data, callback
 
 class AjaxManager
   constructor : (@context) ->
 
-  getWords : (callback)=>
+  fetchNextSet : (callback)=>
     jqXHR = $.getJSON @context.dataServiceUrl(), (data)=>
       unless data
         callback null
@@ -168,7 +230,7 @@ class DatabaseManager
       () -> callback true
     )
 
-  checkIfWordStorageRefreshNecessary : (callback) =>
+  checkAllShown : (callback) =>
     @database.transaction (tx) ->
       tx.executeSql(
         'select count(*) as notShownWordCount from entry where shown="false"',
@@ -194,10 +256,34 @@ class DatabaseManager
       ()->
     )
 
-  addNewWordEntry : (article, translation, word, callback) =>
+  addNewWordEntries : (words, callback) =>
+    escape = (str)-> str.replace "'", "''"
+
+    sql = "INSERT INTO entry "
+
+    i = 0
+    for obj in words
+      do (obj) =>
+        article = escape obj['a']
+        translation = escape obj['t']
+        word = escape obj['w']
+
+        if i==0
+          sql += "SELECT '#{ article }' as 'article', '#{ translation }' as 'translation', '#{ word }' as 'word', 'false' as 'shown' "
+        else
+          sql += "UNION SELECT '#{ article }', '#{ translation }', '#{ word }', 'false' "
+        i++
+
+    sql += ";"
+
+    console.log sql
+
     @database.transaction(
-      (tx) -> tx.executeSql "INSERT INTO entry values(?, ?, ?, 'false')", [article, translation, word] ,
-      (sqlError) -> window.alert(sqlError),
+      (tx) -> tx.executeSql sql, null ,
+      ((sqlError) ->
+        console.log(sqlError)
+        window.alert(sqlError)
+      ),
       () => callback() if callback
     )
 
@@ -212,6 +298,13 @@ class DatabaseManager
   setWordAsShown : (word, callback) =>
     @database.transaction(
       (tx) -> tx.executeSql 'UPDATE entry set shown="true" where entry.word = ?', [word] ,
+      (sqlError) -> callback sqlError,
+      () -> callback()
+    )
+
+  setWordsAsNonShown: (callback) =>
+    @database.transaction(
+      (tx) -> tx.executeSql 'UPDATE entry set shown="false"', null ,
       (sqlError) -> callback sqlError,
       () -> callback()
     )
