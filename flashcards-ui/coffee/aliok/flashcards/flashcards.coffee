@@ -152,25 +152,33 @@ class Controller
       @service.setWordsAsNonShown ()=>
         showNextWord()
 
-    @service.checkAllShown (allShown) =>
-      if allShown
-        @view.askToFetchNextSet (fetchNextSet) =>
-          if fetchNextSet
-            @service.fetchNextSet (success)=>
-              if success
-                showNextWord()
+    @service.areThereWords (thereAreWords) =>
+      unless thereAreWords
+        @service.fetchNextSet (success)=>
+          if success
+            showNextWord()
+          else
+            @view.alertConnectionProblem()
+      else
+        @service.checkAllShown (allShown) =>
+          if allShown
+            @view.askToFetchNextSet (fetchNextSet) =>
+              if fetchNextSet
+                @service.fetchNextSet (success)=>
+                  if success
+                    showNextWord()
+                  else
+                    @view.alertConnectionProblem()
+                    @view.alertShowingCurrentSet()
+                    setWordsAsNonShownAndShowNextWord()
               else
-                @view.alertConnectionProblem()
-                @view.alertShowingCurrentSet()
                 setWordsAsNonShownAndShowNextWord()
           else
-            setWordsAsNonShownAndShowNextWord()
-      else
-        showNextWord()
+            showNextWord()
 
   start:()=>
     @view.registerPageCreateHandler @init
-    if !Modernizr.websqldatabase
+    unless Modernizr.websqldatabase
         @view.alertNoWebsqlDatabase()
     else
       @service.initializeDatabase (constructed) =>
@@ -187,6 +195,9 @@ class Service
   getNextWord :(callback) =>
     @databaseManager.getNextWord (article, translation, word)=>
       @databaseManager.setWordAsShown word, ()=> callback article, translation, word
+
+  areThereWords: (callback) =>
+    @databaseManager.areThereWords callback
 
   checkAllShown: (callback) =>
     @databaseManager.checkAllShown callback
@@ -236,6 +247,21 @@ class DatabaseManager
       () -> callback true
     )
 
+  areThereWords : (callback) =>
+    @database.transaction (tx) ->
+      tx.executeSql(
+        'select count(*) as wordCount from entry',
+        null,
+        ((t,r) ->
+          wordCount = r.rows.item(0)['wordCount']
+          if wordCount
+            callback true
+          else
+            callback false
+        ),
+        () ->
+      )
+
   checkAllShown : (callback) =>
     @database.transaction (tx) ->
       tx.executeSql(
@@ -281,8 +307,6 @@ class DatabaseManager
         i++
 
     sql += ";"
-
-    console.log sql
 
     @database.transaction(
       (tx) -> tx.executeSql sql, null ,
