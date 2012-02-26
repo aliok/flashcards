@@ -231,7 +231,7 @@ class DatabaseManager
   initializeDatabase : (callback) =>
     @database = openDatabase 'flashcards', '1.0', 'Flashcards Database', 2 * 1024 * 1024
     @database.transaction(
-      (tx) -> tx.executeSql 'CREATE TABLE IF NOT EXISTS entry (article TEXT NOT NULL, translation TEXT NOT NULL, word TEXT NOT NULL, shown BOOLEAN NOT NULL)',
+      (tx) -> tx.executeSql 'CREATE TABLE IF NOT EXISTS entry (number INTEGER NOT NULL, article TEXT NOT NULL, translation TEXT NOT NULL, word TEXT NOT NULL, shown BOOLEAN NOT NULL)',
       (sqlError) -> callback false,
       () -> callback true
     )
@@ -253,7 +253,7 @@ class DatabaseManager
 
   getNextWord : (callback) =>
     @database.transaction (tx) -> tx.executeSql(
-      'select * from entry where shown="false" limit 1',
+      'select article, translation, word from entry where shown="false" order by number limit 1',
       null,
       ((t,r) ->
         item = r.rows.item(0)
@@ -275,9 +275,9 @@ class DatabaseManager
         word = escape obj['w']
 
         if i==0
-          sql += "SELECT '#{ article }' as 'article', '#{ translation }' as 'translation', '#{ word }' as 'word', 'false' as 'shown' "
+          sql += "SELECT #{ i } as number, '#{ article }' as 'article', '#{ translation }' as 'translation', '#{ word }' as 'word', 'false' as 'shown' "
         else
-          sql += "UNION SELECT '#{ article }', '#{ translation }', '#{ word }', 'false' "
+          sql += "UNION SELECT #{ i }, '#{ article }', '#{ translation }', '#{ word }', 'false' "
         i++
 
     sql += ";"
