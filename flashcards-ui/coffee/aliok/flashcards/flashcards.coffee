@@ -14,7 +14,6 @@
 
 
 ###
-ask user what to do when all words are shown
 add info link (src, etc)
 offline support
 show current set number on the ui
