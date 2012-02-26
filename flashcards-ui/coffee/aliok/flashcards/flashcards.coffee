@@ -14,7 +14,6 @@
 
 
 ###
-add info link (src, etc)
 offline support
 show current set number on the ui
 allow fetching a set by number
