@@ -94,6 +94,12 @@ class View
 
   alert : (text)-> window.alert text
 
+  alertConnectionProblem : ()=> @alert('Unable to connect server, please check your internet connection.')
+
+  alertShowingCurrentSet : ()=> @alert('New words could not be fetched, thus showing the same word set.')
+
+  alertNoWebsqlDatabase : ()=> @alert("Your browser doesn't support websql database, thus the application could not run.")
+
 class Controller
   constructor: (@view, @service) ->
     @currentArticle = null
@@ -140,7 +146,6 @@ class Controller
           @view.hideLoadingDialog()
         else
           @view.hideLoadingDialog()
-          #TODO: view.alert "Unable to connect server, please check your internet connection."
           @view.alertConnectionProblem()
 
     setWordsAsNonShownAndShowNextWord = ()=>
@@ -156,7 +161,6 @@ class Controller
                 showNextWord()
               else
                 @view.alertConnectionProblem()
-                ##TODO
                 @view.alertShowingCurrentSet()
                 setWordsAsNonShownAndShowNextWord()
           else
@@ -166,10 +170,12 @@ class Controller
 
   start:()=>
     @view.registerPageCreateHandler @init
-    #TODO: check for websql support somewhere
-    @service.initializeDatabase (constructed) =>
-      if not constructed
-        @view.alert ('Unable to construct the local database!')
+    if !Modernizr.websqldatabase
+        @view.alertNoWebsqlDatabase()
+    else
+      @service.initializeDatabase (constructed) =>
+        if not constructed
+          @view.alert ('Unable to construct the local database!')
 
 
 class Service
