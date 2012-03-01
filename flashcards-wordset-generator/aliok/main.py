@@ -19,10 +19,10 @@ __author__ = 'ali'
 
 BASE_URL = "http://de.wikipedia.org"
 
-WIKIPEDIA_INTERNAL_LINK_PATTERN = re.compile('href="(?P<entry>/wiki/([^:"])*)"', re.IGNORECASE)
-HTML_TAG_PATTERN = re.compile(r"</?[^<][^>]*>", re.IGNORECASE)
+WIKIPEDIA_INTERNAL_LINK_PATTERN = re.compile(r'href="(?P<entry>/wiki/([^:"])*)"', re.UNICODE | re.IGNORECASE)
+HTML_TAG_PATTERN = re.compile(ur"</?[^<][^>]*>", re.UNICODE | re.IGNORECASE)
 
-HTML_WORD_PATTERN = re.compile(r"(\w+)", re.IGNORECASE)
+HTML_WORD_PATTERN = re.compile(ur"(\w+)", re.UNICODE | re.IGNORECASE)
 
 class Crawler:
     def __init__(self, numberOfArticles):
@@ -70,7 +70,7 @@ class Crawler:
     def getArticleContent(self, article):
         req = urllib2.Request(BASE_URL + article, headers={'User-Agent': "Magic Browser"})
         f = urllib2.urlopen(req)
-        data = f.read()
+        data = f.read().decode('utf-8')
         f.close()
         data = data.replace("\n", " ")
         return data
@@ -85,8 +85,8 @@ def main():
     parser = argparse.ArgumentParser(
         description='Crawls German Wikipedia until a number of articles and counts the words.\n'\
                     'For example: '\
-                    '--operation crawl --stateFile state.dat --numberOfArticles 10 : Crawls 10 articles and save the ' \
-                    'state to file "state.dat". When you execute this command for the second time, the crawling ' \
+                    '--operation crawl --stateFile state.dat --numberOfArticles 10 : Crawls 10 articles and save the '\
+                    'state to file "state.dat". When you execute this command for the second time, the crawling '\
                     'operation will continue from the last state; it will not start from the beginning.')
     parser.add_argument('--operation', dest='operation', help='Operation to do', required=True,
         choices=['crawl', 'printState', 'printWordCounts'])
@@ -145,11 +145,11 @@ def main():
         sortedWordCountMap = sorted(crawler.wordCountsMap.iteritems(), key=lambda (k, v): (v, k), reverse=True)
 
         for key, value in sortedWordCountMap:
-            print "{:<50} {:>5}".format(key, value)
+            print "{:<50} {:>5}".format(repr(key), value)
 
 if __name__ == "__main__":
     sys.exit(main())
 
-#./main.py --operation crawl --stateFile state.dat --numberOfArticles 10
-#./main.py --operation printState --stateFile state.dat
-#./main.py --operation printWordCounts --stateFile state.dat > output.txt
+    #./main.py --operation crawl --stateFile state.dat --numberOfArticles 10
+    #./main.py --operation printState --stateFile state.dat
+    #./main.py --operation printWordCounts --stateFile state.dat > output.txt
