@@ -1,7 +1,6 @@
 import os
 import pickle
 import re
-import Queue
 import urllib2
 import sys
 import argparse
