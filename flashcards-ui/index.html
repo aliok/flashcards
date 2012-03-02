@@ -23,7 +23,10 @@
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <link rel="apple-touch-icon" href="/static/img/iphone-icon.png"/>
+
+    <link rel="apple-touch-icon" href="/static/img/iphone-icon-57.png"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="/static/img/iphone-icon-72.png"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="/static/img/iphone-icon-114.png"/>
 
     <link rel="apple-touch-startup-image" href="/static/img/iphone-startup.png" />
     <link rel="apple-touch-startup-image" sizes="640x960" href="/static/img/iphone-startup-hi-res.png" />
@@ -39,6 +42,15 @@
     <!--<link rel="stylesheet" href="static/thirdparty/jquery.mobile/jquery.mobile-1.0.1.css"/>-->
     <!--<script src="static/thirdparty/jquery/jquery-1.6.4.js"></script>-->
     <!--<script src="static/thirdparty/jquery.mobile/jquery.mobile-1.0.1.js"></script>-->
+
+    <script type="text/javascript">
+        var addToHomeConfig = {
+            touchIcon: true
+        };
+    </script>
+
+    <link rel="stylesheet" href="static/thirdparty/add2home/add2home.css">
+    <script type="application/javascript" src="static/thirdparty/add2home/add2home.js" charset="utf-8"></script>
 
     <script src="static/js/aliok/flashcards/flashcards.js"></script>
 
@@ -88,7 +100,7 @@
             <button id="nextWord">Next</button>
         </div>
         
-        <div style="bottom:10px; width: 100%; position: fixed; text-align: center;">
+        <div style="width: 100%; margin-top: 50px; text-align: center;">
             <a href="https://github.com/aliok/flashcards" target="_blank">
                 Source code and other info
             </a>
