@@ -82,13 +82,12 @@ class View
 
     $('#nextSetFetchConfirmationYesButton').live 'click', ()=>
       $('#nextSetFetchConfirmationYesButton').die 'click'
-      goBackToIndex()
-      callback(true)
+      callback true, goBackToIndex()
 
     $('#nextSetFetchConfirmationNoButton').live 'click', ()=>
       $('#nextSetFetchConfirmationNoButton').die 'click'
       goBackToIndex()
-      callback(false)
+      callback false, goBackToIndex()
 
   alert : (text)-> window.alert text
 
@@ -129,9 +128,11 @@ class Controller
   nextWord:()=>
     @view.showLoadingDialog()
 
-    showNextWord = ()=>
+    showNextWord = (callback)=>
       @service.getNextWord (article, translation, word)=>
         if word?
+          if(callback)
+            callback()
           @currentArticle = article
           @currentTranslation = translation
 
@@ -143,12 +144,14 @@ class Controller
 
           @view.hideLoadingDialog()
         else
+          if(callback)
+            callback()
           @view.hideLoadingDialog()
           @view.alertConnectionProblem()
 
-    setWordsAsNonShownAndShowNextWord = ()=>
+    setWordsAsNonShownAndShowNextWord = (callback)=>
       @service.setWordsAsNonShown ()=>
-        showNextWord()
+        showNextWord callback
 
     @service.areThereWords (thereAreWords) =>
       unless thereAreWords
@@ -160,17 +163,17 @@ class Controller
       else
         @service.checkAllShown (allShown) =>
           if allShown
-            @view.askToFetchNextSet (fetchNextSet) =>
+            @view.askToFetchNextSet (fetchNextSet, callback) =>
               if fetchNextSet
                 @service.fetchNextSet (success)=>
                   if success
-                    showNextWord()
+                    showNextWord callback
                   else
                     @view.alertConnectionProblem()
                     @view.alertShowingCurrentSet()
-                    setWordsAsNonShownAndShowNextWord()
+                    setWordsAsNonShownAndShowNextWord callback
               else
-                setWordsAsNonShownAndShowNextWord()
+                setWordsAsNonShownAndShowNextWord callback
           else
             showNextWord()
 
