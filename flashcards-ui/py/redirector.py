@@ -12,27 +12,10 @@
 #See the License for the specific language governing permissions and
 #limitations under the License.
 
-application: the-flashcards
-version: 0-0-6-snapshot
-runtime: python27
-api_version: 1
-threadsafe: true
+import webapp2
 
-handlers:
-- url: /favicon\.ico
-  static_files: favicon.ico
-  upload: favicon\.ico
+class RedirectHandler(webapp2.RequestHandler):
+    def get(self):
+        self.redirect('/index.html')
 
-- url: /static
-  static_dir: static
-
-- url: /
-  script: py.redirector.application
-
-- url: /index.html
-  static_files: index.html
-  upload: index.html
-
-- url: /confirmFetchNextSet.html
-  static_files: confirmFetchNextSet.html
-  upload: confirmFetchNextSet.html
+application = webapp2.WSGIApplication([('/', RedirectHandler)], debug=True)

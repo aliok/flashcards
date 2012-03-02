@@ -11,28 +11,3 @@
 #WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #See the License for the specific language governing permissions and
 #limitations under the License.
-
-application: the-flashcards
-version: 0-0-6-snapshot
-runtime: python27
-api_version: 1
-threadsafe: true
-
-handlers:
-- url: /favicon\.ico
-  static_files: favicon.ico
-  upload: favicon\.ico
-
-- url: /static
-  static_dir: static
-
-- url: /
-  script: py.redirector.application
-
-- url: /index.html
-  static_files: index.html
-  upload: index.html
-
-- url: /confirmFetchNextSet.html
-  static_files: confirmFetchNextSet.html
-  upload: confirmFetchNextSet.html
