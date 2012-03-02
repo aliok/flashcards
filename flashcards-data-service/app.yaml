@@ -25,7 +25,3 @@ handlers:
 
 - url: /data.*
   script: aliok.flashcards.data_service.service.application
-
-- url: /init.*
-  script: aliok.flashcards.data_service.initalizer.application
-  login: admin
