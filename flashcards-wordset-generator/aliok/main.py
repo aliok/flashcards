@@ -40,8 +40,8 @@ class Crawler:
         while len(self.articlesQueue) and crawledItemCount < self.numberOfArticles:
             crawledItemCount += 1
             article = self.articlesQueue.pop(0)
-            print 'Gonna inspect article #{} : {}'.format(crawledItemCount, article)
-            print 'Items in the queue: ' + str(len(self.articlesQueue))
+            print '#Gonna inspect article #{} : {}'.format(crawledItemCount, article)
+            print '#Items in the queue: ' + str(len(self.articlesQueue))
 
             self.visitedArticles[article] = True
             data = self.getArticleContent(article)
@@ -51,7 +51,7 @@ class Crawler:
                 if self.visitedArticles.has_key(word):
                     continue
                 else:
-                    print '\tAdding article : {}'.format(word)
+                    print '\t#Adding article : {}'.format(word)
                     self.articlesQueue.append(word)
 
 
@@ -89,18 +89,20 @@ def main():
                     'state to file "state.dat". When you execute this command for the second time, the crawling '\
                     'operation will continue from the last state; it will not start from the beginning.')
     parser.add_argument('--operation', dest='operation', help='Operation to do', required=True,
-        choices=['crawl', 'printState', 'printWordCounts'])
+        choices=['crawl', 'printState', 'printWordCounts', 'sortWordSet'])
     parser.add_argument('--stateFile', dest='stateFile', help='File to read/save the state of the crawler',
         required=True)
     parser.add_argument('--numberOfArticles', dest='numberOfArticles', type=int,
         help='Number of articles to crawl, default to 100', default=100)
+    parser.add_argument('--setSize', dest='setSize', type=int,
+        help='Set size for generated sorted words list, default to 100', default=100)
 
     args = parser.parse_args()
 
     crawler = None
 
     if os.path.exists(args.stateFile):
-        print 'Found stateFile, trying to restore the crawler state.'
+        print '#Found stateFile, trying to restore the crawler state.'
         with open(args.stateFile) as stateFile:
             try:
                 crawler = pickle.load(stateFile)
@@ -147,9 +149,37 @@ def main():
         for key, value in sortedWordCountMap:
             print "{:<50} {:>5}".format(repr(key), value)
 
+    elif args.operation == 'sortWordSet':
+        #crawler.wordCountsMap
+        import dictSet
+
+        mergedWordCountMap = {}
+
+        for entry in dictSet.dictSet:
+            (article, word, translation) = entry
+            count = 0
+            if crawler.wordCountsMap.has_key(word.lower()):
+                count = crawler.wordCountsMap[word.lower()]
+
+            mergedWordCountMap[entry] = count
+
+        mergedWordCountMap = sorted(mergedWordCountMap.iteritems(), key=lambda ((a,w,t), v): (v, (w,a,t)), reverse=True)
+
+        mergedWordCountMap = mergedWordCountMap[0:15000]
+
+        for i in range(0,len(mergedWordCountMap)/args.setSize):
+            end = i*args.setSize + args.setSize
+            if end >= len(mergedWordCountMap):
+                end = len(mergedWordCountMap)-1
+
+            print 'dictSet_{} = '.format(i), repr([key for (key,value) in mergedWordCountMap[i*args.setSize : end]])
+
+        print 'dictSetCount={}'.format(len(mergedWordCountMap)/args.setSize)
+
 if __name__ == "__main__":
     sys.exit(main())
 
     #./main.py --operation crawl --stateFile state.dat --numberOfArticles 10
     #./main.py --operation printState --stateFile state.dat
     #./main.py --operation printWordCounts --stateFile state.dat > output.txt
+    #./main.py --operation sortWordSet --stateFile state.dat > sortedSet.txt
