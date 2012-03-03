@@ -42,18 +42,18 @@ Options/Operations
     This is the only operation that creates/modifies a state file. Other operations just use the state file to produce other things.
 
     An example:
-    ./main.py --operation crawl --stateFile state.dat --numberOfArticles 10
+    `./main.py --operation crawl --stateFile state.dat --numberOfArticles 10`
 
 * printState : This is just for auditing purposes. Gives a verbose output(items in the queue and visited articles set) of a given state file.
 
     An example:
-    ./main.py --operation printState --stateFile state.dat
+    `./main.py --operation printState --stateFile state.dat`
 
 
 * printWordCounts : This is also for auditing purposes. Writes the word counts.
 
     An example:
-    ./main.py --operation printWordCounts --stateFile state.dat > output.txt
+    `./main.py --operation printWordCounts --stateFile state.dat > output.txt`
 
 
 * sortWordSet : Sorts the word-article-translation list with respect to word-count map and outputs the result.
@@ -63,4 +63,4 @@ Options/Operations
     The result is separated into multiple sets of a certain size and output like that.
 
     An example:
-    ./main.py --operation sortWordSet --stateFile state.dat --setSize 100 > sortedSet.txt
+    `./main.py --operation sortWordSet --stateFile state.dat --setSize 100 > sortedSet.txt`

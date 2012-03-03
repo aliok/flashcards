@@ -43,7 +43,7 @@ Project consists of 3 parts:
 Building
 ===================
 
-You can run buildcoffee.py and compile CoffeeScript into Javascript, or you can run watchcoffee.py and let CoffeeScript compiler watch
+You can run `buildcoffee.py` and compile CoffeeScript into Javascript, or you can run `watchcoffee.py` and let CoffeeScript compiler watch
 the changes on your resources and recompile if necessary.
 
 Both scripts use the node.js module of CoffeeScript, so node.js and the CoffeeScript module must be installed on your system.
