@@ -46,3 +46,7 @@ Consists of 3 modules:
 Give it a try
 =================
 The application is available on [http://the-flashcards.appspot.com](http://the-flashcards.appspot.com).
+
+It is Android 2.2+, IOS (Iphone, Ipad etc), Chrome and Safari compatible.
+
+The application should run perfectly on any browser that supports Html5 websql API and localstorage API.
