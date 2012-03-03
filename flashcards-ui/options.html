@@ -19,32 +19,6 @@
 
 <head>
     <title>Options</title>
-
-    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-
-    <link rel="apple-touch-icon" href="/static/img/iphone-icon-57.png"/>
-    <link rel="apple-touch-icon" sizes="72x72" href="/static/img/iphone-icon-72.png"/>
-    <link rel="apple-touch-icon" sizes="114x114" href="/static/img/iphone-icon-114.png"/>
-
-    <link rel="apple-touch-startup-image" href="/static/img/iphone-startup.png" />
-    <link rel="apple-touch-startup-image" sizes="640x960" href="/static/img/iphone-startup-hi-res.png" />
-
-    <script src="static/thirdparty/modernizr.js"></script>
-
-    <!--jquery and jquery mobile compressed-->
-    <link rel="stylesheet" href="static/thirdparty/jquery.mobile/jquery.mobile-1.0.1.min.css"/>
-    <script src="static/thirdparty/jquery/jquery-1.6.4.min.js"></script>
-    <script src="static/thirdparty/jquery.mobile/jquery.mobile-1.0.1.min.js"></script>
-
-    <!--jquery and jquery mobile not compressed-->
-    <!--<link rel="stylesheet" href="static/thirdparty/jquery.mobile/jquery.mobile-1.0.1.css"/>-->
-    <!--<script src="static/thirdparty/jquery/jquery-1.6.4.js"></script>-->
-    <!--<script src="static/thirdparty/jquery.mobile/jquery.mobile-1.0.1.js"></script>-->
-
-    <!--<script src="static/js/aliok/flashcards/flashcards.js"></script>-->
-
 </head>
 
 <body>
@@ -74,12 +48,17 @@
         <br/>
 
         <div class="ui-body ui-body-e">
-            If you think you're done with current word set, you can always fetch the next set manually.
+            <p>
+                If you think you're done with current word set, you can always fetch the next set manually.
+            </p>
             <p>
                 You don't need to fetch sets manually at all, because the next set is
                 automatically fetched when you went through all the words in current set.
             </p>
             <button id="nextSet" data-inline="true" data-mini="true">Fetch next word set</button>
+            <p>
+                A word set contains 100 entries and they're kept in your device. Thus, you can use the application offline (through your browser or the Android app).
+            </p>
         </div>
 
         <br/>
@@ -106,6 +85,14 @@
                 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
                 See the License for the specific language governing permissions and
                 limitations under the License.
+            </p>
+        </div>
+        <br/>
+        <div class="ui-body ui-body-a" style="text-align: left">
+            <p>
+                GPL dictionary of Technische Universitaet Chemnitz is used for generating the word list.
+                <br/>
+                http://ftp.tu-chemnitz.de/pub/Local/urz/ding/de-en/
             </p>
         </div>
 
