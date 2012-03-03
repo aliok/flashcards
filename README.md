@@ -17,14 +17,15 @@ limitations under the License.
 
 Project
 ============
-A flash cards application for learning German [articles(artikel)](http://en.wikipedia.org/wiki/Article_(grammar)).
+A flash cards application for learning German [articles(artikel)](http://en.wikipedia.org/wiki/Article_(grammar) ).
 
 The application is hosted on Google App Engine with this URL: [http://the-flashcards.appspot.com](http://the-flashcards.appspot.com)
 
 Consists of 3 modules:
+
 * flashcards-data-service : Data provider for the application. Python + Google App Engine project. 
 	
-	The service responses with the words(along with articles and English translation) of a specified count (currently 100) and a user key.
+	The service responds with the words(along with articles and English translation) of a specified count (currently 100) and a user key.
 	If the same user key is given to the service for the next time, the service returns the next set. If no user key is passed, then it returns the first set.
 	
 	See the module's README for more details.
@@ -40,6 +41,7 @@ Consists of 3 modules:
 	It goes through Wikipedia articles, follows links to Wikipedia articles until a certain point and determines the frequency of the words in an existing dictionary. 
 	Thus, the most frequent words can be asked first.
 	
+	See the module's README for more details.
 
 Give it a try
 =================
