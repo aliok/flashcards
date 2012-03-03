@@ -39,6 +39,9 @@ class View
   registerAnswerDieButtonHandler :(callback)->$('#answerDie').bind 'click', callback
   registerAnswerDasButtonHandler :(callback)->$('#answerDas').bind 'click', callback
   registerNextWordButtonHandler  :(callback)->$('#nextWord' ).bind 'click', callback
+  registerNextSetButtonHandler  : (callback)->$('#nextSet'  ).bind 'click', ()=>
+    $('#nextSet').die 'click'
+    callback()
 
   setWord       :(word)->        $('#word').html word
   setTranslation:(translation)-> $('#translation').html translation
@@ -66,6 +69,13 @@ class View
     else
       $('#article').attr 'class', 'wrong'
 
+  goBackToIndex : (changeHash=false) =>
+    $.mobile.changePage( "index.html", {
+    transition: "pop",
+    reverse: true,
+    changeHash: changeHash
+    });
+
   askToFetchNextSet : (callback) =>
     $.mobile.changePage( "confirmFetchNextSet.html", {
       transition: "pop",
@@ -73,21 +83,13 @@ class View
       changeHash: false
     });
 
-    goBackToIndex = () =>
-      $.mobile.changePage( "index.html", {
-        transition: "pop",
-        reverse: true,
-        changeHash: false
-      });
-
     $('#nextSetFetchConfirmationYesButton').live 'click', ()=>
       $('#nextSetFetchConfirmationYesButton').die 'click'
-      callback true, goBackToIndex()
+      callback true, @goBackToIndex()
 
     $('#nextSetFetchConfirmationNoButton').live 'click', ()=>
       $('#nextSetFetchConfirmationNoButton').die 'click'
-      goBackToIndex()
-      callback false, goBackToIndex()
+      callback false, @goBackToIndex()
 
   alert : (text)-> window.alert text
 
@@ -108,6 +110,7 @@ class Controller
     @view.registerAnswerDieButtonHandler @answerDie
     @view.registerAnswerDasButtonHandler @answerDas
     @view.registerNextWordButtonHandler  @nextWord
+    @view.registerNextSetButtonHandler   @nextSet
     @view.setScore 0
     @nextWord()
 
@@ -125,39 +128,39 @@ class Controller
     @view.setScore        @score
     @view.showResult()
 
+  _showNextWordFromUnshownWords : (callback)=>
+    @service.getNextWord (article, translation, word)=>
+      if word?
+        if(callback)
+          callback()
+        @currentArticle = article
+        @currentTranslation = translation
+
+        @view.showChoices()
+
+        @view.setWord word
+        @view.setTranslation @currentTranslation
+        @view.setArticle @currentArticle
+
+        @view.hideLoadingDialog()
+      else
+        if(callback)
+          callback()
+        @view.hideLoadingDialog()
+        @view.alertConnectionProblem()
+
   nextWord:()=>
     @view.showLoadingDialog()
 
-    showNextWord = (callback)=>
-      @service.getNextWord (article, translation, word)=>
-        if word?
-          if(callback)
-            callback()
-          @currentArticle = article
-          @currentTranslation = translation
-
-          @view.showChoices()
-
-          @view.setWord word
-          @view.setTranslation @currentTranslation
-          @view.setArticle @currentArticle
-
-          @view.hideLoadingDialog()
-        else
-          if(callback)
-            callback()
-          @view.hideLoadingDialog()
-          @view.alertConnectionProblem()
-
     setWordsAsNonShownAndShowNextWord = (callback)=>
       @service.setWordsAsNonShown ()=>
-        showNextWord callback
+        @_showNextWordFromUnshownWords callback
 
     @service.areThereWords (thereAreWords) =>
       unless thereAreWords
         @service.fetchNextSet (success)=>
           if success
-            showNextWord()
+            @_showNextWordFromUnshownWords()
           else
             @view.alertConnectionProblem()
       else
@@ -167,7 +170,7 @@ class Controller
               if fetchNextSet
                 @service.fetchNextSet (success)=>
                   if success
-                    showNextWord callback
+                    @_showNextWordFromUnshownWords callback
                   else
                     @view.alertConnectionProblem()
                     @view.alertShowingCurrentSet()
@@ -175,7 +178,16 @@ class Controller
               else
                 setWordsAsNonShownAndShowNextWord callback
           else
-            showNextWord()
+            @_showNextWordFromUnshownWords()
+
+  nextSet: ()=>
+    @service.fetchNextSet (success)=>
+      if success
+        @_showNextWordFromUnshownWords ()=>
+          @view.goBackToIndex(true)
+      else
+        @view.alertConnectionProblem()
+
 
   start:()=>
     @view.registerPageCreateHandler @init
