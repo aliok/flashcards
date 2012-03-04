@@ -14,6 +14,7 @@
 
 
 ###
+if there are no words yet, and the app is offline, then all buttons are shown!
 offline support
 show current set number on the ui
 allow fetching a set by number
