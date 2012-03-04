@@ -236,14 +236,19 @@ class AjaxManager
   constructor : (@context) ->
 
   fetchNextSet : (callback)=>
-    jqXHR = $.getJSON @context.dataServiceUrl(), (data)=>
-      unless data
-        callback null
-      else
-        if data['userKey']
-          localStorage['userKey'] = data['userKey']
-          console.log('Received user key :' + data['userKey'])
-        callback data['entries']
+    jqXHR = $.ajax({
+      url: @context.dataServiceUrl(),
+      dataType: 'json',
+      timeout: 10000
+      success: (data)=>
+        unless data
+          callback null
+        else
+          if data['userKey']
+            localStorage['userKey'] = data['userKey']
+            console.log('Received user key :' + data['userKey'])
+          callback data['entries']
+    });
 
     jqXHR.error () ->
       console.error 'Data call caused an error'
