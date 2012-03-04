@@ -16,6 +16,6 @@ import webapp2
 
 class RedirectHandler(webapp2.RequestHandler):
     def get(self):
-        self.redirect('/index.html')
+        self.redirect('/pages/index.html')
 
 application = webapp2.WSGIApplication([('/', RedirectHandler)], debug=True)

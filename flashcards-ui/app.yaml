@@ -29,14 +29,14 @@ handlers:
 - url: /
   script: py.redirector.application
 
-- url: /index.html
-  static_files: index.html
-  upload: index.html
+- url: /pages/index.html
+  static_files: pages/index.html
+  upload: pages/index.html
 
-- url: /confirmFetchNextSet.html
-  static_files: confirmFetchNextSet.html
-  upload: confirmFetchNextSet.html
+- url: /pages/confirmFetchNextSet.html
+  static_files: pages/confirmFetchNextSet.html
+  upload: pages/confirmFetchNextSet.html
 
-- url: /options.html
-  static_files: options.html
-  upload: options.html
+- url: /pages/options.html
+  static_files: pages/options.html
+  upload: pages/options.html
