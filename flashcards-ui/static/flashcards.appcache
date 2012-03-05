@@ -1,0 +1,61 @@
+#Copyright [2011] [Ali Ok - aliok AT apache org]
+#
+#Licensed under the Apache License, Version 2.0 (the "License");
+#you may not use this file except in compliance with the License.
+#You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+#Unless required by applicable law or agreed to in writing, software
+#distributed under the License is distributed on an "AS IS" BASIS,
+#WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#See the License for the specific language governing permissions and
+#limitations under the License.
+
+CACHE MANIFEST
+# file version : 4
+
+CACHE:
+
+##  pages
+/pages/confirmFetchNextSet.html
+/pages/index.html
+/pages/options.html
+
+## images
+/static/img/favicon.ico
+/static/img/iphone-icon-57.png
+/static/img/iphone-icon-72.png
+/static/img/iphone-icon-114.png
+/static/img/iphone-startup-hi-res.png
+/static/img/iphone-startup.png
+
+## script
+/static/js/aliok/flashcards/flashcards.js
+
+## third party resources
+#       add2home
+/static/thirdparty/add2home/add2home.css
+/static/thirdparty/add2home/add2home.js
+
+#       jquery
+#/static/thirdparty/jquery/jquery-1.6.4.js
+/static/thirdparty/jquery/jquery-1.6.4.min.js
+
+#       jquery.mobile
+/static/thirdparty/jquery.mobile/jquery.mobile-1.0.1.min.css
+/static/thirdparty/jquery.mobile/jquery.mobile-1.0.1.min.js
+#/static/thirdparty/jquery.mobile/jquery.mobile-1.0.1.css
+#/static/thirdparty/jquery.mobile/jquery.mobile-1.0.1.js
+/static/thirdparty/jquery.mobile/images/ajax-loader.png
+/static/thirdparty/jquery.mobile/images/icons-18-black.png
+/static/thirdparty/jquery.mobile/images/icons-18-white.png
+/static/thirdparty/jquery.mobile/images/icons-36-black.png
+/static/thirdparty/jquery.mobile/images/icons-36-white.png
+
+#       modernizr
+/static/thirdparty/modernizr.js
+
+
+NETWORK:
+http://the-flashcards-data-service.appspot.com

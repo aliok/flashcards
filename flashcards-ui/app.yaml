@@ -23,6 +23,11 @@ handlers:
   static_files: favicon.ico
   upload: favicon\.ico
 
+- url: /static/(.*\.appcache)
+  static_files: static/\1
+  mime_type: text/cache-manifest
+  upload: static/(.*\.appcache)
+
 - url: /static
   static_dir: static
 
