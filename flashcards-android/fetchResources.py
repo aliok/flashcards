@@ -18,6 +18,7 @@ __author__ = 'ali'
 
 import sys
 import shutil
+import os
 
 resourceFolders = ['pages/', 'static/']
 sourceFolder = '../flashcards-ui/'
@@ -25,8 +26,11 @@ destinationFolder = 'assets/www/'
 
 def main():
     for path in resourceFolders:
-        shutil.rmtree(destinationFolder + path)
-        shutil.copytree(sourceFolder + path, destinationFolder + path)
+        destination_folder_path = destinationFolder + path
+        if os.path.exists(destination_folder_path):
+            shutil.rmtree(destination_folder_path)
+
+        shutil.copytree(sourceFolder + path, destination_folder_path)
 
 if __name__ == "__main__":
     sys.exit(main())
