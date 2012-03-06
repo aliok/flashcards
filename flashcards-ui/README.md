@@ -31,6 +31,8 @@ If user wants study the current set again, then it doesn't fetch the next word s
 
 There are some small features for IOS, which allows better integration. _add2home_ is used for suggesting users to add the app to their home screen.
 
+Html5 offline features (appcache, etc) is also used. So, the users can use the application offline on their devices.
+
 Development
 ==========================
 
