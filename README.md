@@ -81,3 +81,5 @@ IOS Screenshots
 ![IOS Screenshot 6](https://sites.google.com/a/aliok.com.tr/upload/uploads/ios-06.png?attredirects=0)
 
 ![IOS Screenshot 7](https://sites.google.com/a/aliok.com.tr/upload/uploads/ios-07.png?attredirects=0)
+
+![IOS Screenshot 8](https://sites.google.com/a/aliok.com.tr/upload/uploads/ios-08.png?attredirects=0)
