@@ -13,7 +13,7 @@
 #limitations under the License.
 
 application: the-flashcards
-version: 0-0-8-snapshot
+version: 0-0-8
 runtime: python27
 api_version: 1
 threadsafe: true
