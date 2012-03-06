@@ -19,7 +19,7 @@ Project
 ============
 A flash cards application for learning German [articles(artikel)](http://en.wikipedia.org/wiki/Article_(grammar) ).
 
-The application is hosted on Google App Engine with this URL: [http://the-flashcards.appspot.com](http://the-flashcards.appspot.com)
+The application is hosted on Google App Engine with this URL: [http://the-flashcards.appspot.com](http://the-flashcards.appspot.com) or, [http://bit.ly/deflashcards](http://bit.ly/deflashcards) for short.
 
 Consists of 4 modules:
 
