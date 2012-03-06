@@ -15,7 +15,6 @@
 
 ###
 if there are no words yet, and the app is offline, then all buttons are shown!
-offline support
 show current set number on the ui
 allow fetching a set by number
 next word button, previous word button
@@ -182,11 +181,15 @@ class Controller
             @_showNextWordFromUnshownWords()
 
   nextSet: ()=>
+    @view.showLoadingDialog()
+
     @service.fetchNextSet (success)=>
       if success
         @_showNextWordFromUnshownWords ()=>
+          @view.hideLoadingDialog()
           @view.goBackToIndex(true)
       else
+        @view.hideLoadingDialog()
         @view.alertConnectionProblem()
 
 
