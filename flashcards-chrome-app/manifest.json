@@ -1,0 +1,21 @@
+{
+  "name": "German Flashcards",
+  "description": "Offline and free (open source) flashcards application for learning German with 15000 words.",
+  "version": "1.0.1",
+  "app": {
+    "urls": [
+      "*://the-flashcards.appspot.com/"
+    ],
+    "launch": {
+      "web_url": "http://the-flashcards.appspot.com/"
+    }
+  },
+  "icons": {
+    "128": "icon_128.png"
+  },
+  "offline_enabled" : true,
+  "permissions": [
+    "unlimitedStorage",
+    "notifications"
+  ]
+}
