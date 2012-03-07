@@ -61,8 +61,7 @@ The application should run perfectly on any browser that supports Html5 websql A
 Android Market
 =================
 
-The application is also available on Android market.
-TODO: ADD LINK to the app
+The application is also available  [https://play.google.com/store/apps/details?id=tr.com.aliok.flashcards](on Android market).
 
 
 IOS Screenshots
