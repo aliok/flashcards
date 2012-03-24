@@ -15,13 +15,41 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
+
+Give it a try
+=================
+
+Android Market
+--------------
+
+The application is available on Android Market : [https://play.google.com/store/apps/details?id=tr.com.aliok.flashcards](https://play.google.com/store/apps/details?id=tr.com.aliok.flashcards)
+
+
+Chrome Web Store
+--------------
+
+The application is available on Chrome web store : [https://chrome.google.com/webstore/detail/ijecamokjmiajijbajfnlbkfknpplkdf](https://chrome.google.com/webstore/detail/ijecamokjmiajijbajfnlbkfknpplkdf)
+
+
+Online
+--------------
+
+The application is available on [http://bit.ly/deFlashcards](http://bit.ly/deFlashcards) if you prefer using your browser, instead of applications given above.
+
+It is Android 2.2+, IOS (Iphone, Ipad etc), Chrome and Safari compatible.
+
+The application should run perfectly on any browser that supports Html5 websql API and localstorage API.
+
+
+
 Project
 ============
+
 A flash cards application for learning German [articles(artikel)](http://en.wikipedia.org/wiki/Article_(grammar) ).
 
 The application is hosted on Google App Engine with this URL: [http://the-flashcards.appspot.com](http://the-flashcards.appspot.com) or, [http://bit.ly/deFlashcards](http://bit.ly/deFlashcards) for short.
 
-Consists of 4 modules:
+Consists of 5 modules:
 
 * flashcards-data-service : Data provider for the application. Python + Google App Engine project. 
 	
@@ -48,20 +76,12 @@ Consists of 4 modules:
 	Thus, the most frequent words can be asked first.
 	
 	See the module's README for more details.
+
+* flashcards-chrome-app : Chrome Web Store application
+
+	Contains the manifest for Chrome Web Store application.
 	
-Give it a try
-=================
-
-The application is available on [http://bit.ly/deFlashcards](http://bit.ly/deFlashcards).
-
-It is Android 2.2+, IOS (Iphone, Ipad etc), Chrome and Safari compatible.
-
-The application should run perfectly on any browser that supports Html5 websql API and localstorage API.
-
-Android Market
-=================
-
-The application is also available  [on Android market](https://play.google.com/store/apps/details?id=tr.com.aliok.flashcards).
+	Available in Chrome Web store.
 
 
 IOS Screenshots
